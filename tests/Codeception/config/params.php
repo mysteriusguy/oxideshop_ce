@@ -8,8 +8,7 @@
 namespace OxidEsales\DoctrineMigrationWrapper;
 
 use OxidEsales\Facts\Facts;
-use OxidEsales\Eshop\Core\ConfigFile;
-use OxidEsales\TestingLibrary\Services\Library\DatabaseDefaultsFileGenerator;
+use Webmozart\PathUtil\Path;
 
 $facts = new Facts();
 
@@ -23,13 +22,13 @@ return [
     'SHOP_URL' => $facts->getShopUrl(),
     'SHOP_SOURCE_PATH' => $facts->getSourcePath(),
     'VENDOR_PATH' => $facts->getVendorPath(),
-    'DB_NAME' => $facts->getDatabaseName(),
-    'DB_USERNAME' => $facts->getDatabaseUserName(),
-    'DB_PASSWORD' => $facts->getDatabasePassword(),
-    'DB_HOST' => $facts->getDatabaseHost(),
-    'DB_PORT' => $facts->getDatabasePort(),
-    'DUMP_PATH' => getTestDataDumpFilePath(),
-    'MYSQL_CONFIG_PATH' => getMysqlConfigPath(),
+    'DB_NAME' => 'testce',
+    'DB_USERNAME' => 'oxid',
+    'DB_PASSWORD' => 'oxid',
+    'DB_HOST' => 'localhost',
+    'DB_PORT' => 3306,
+    'DUMP_PATH' => Path::join('..', '..', 'TestUtils', 'Database', 'in_memory_schema_ce.sql'),
+    'MYSQL_CONFIG_PATH' => Path::join(__DIR__, 'mysql.cnf'),
     'SELENIUM_SERVER_PORT' => $selenium_server_port,
     'PHP_BIN' => $php,
     'SCREEN_SHOT_URL' => $cc_screen_shot_url
@@ -44,7 +43,7 @@ function getShopSuitePath($facts)
 {
     $testSuitePath = getenv('TEST_SUITE');
     if (!$testSuitePath) {
-        $testSuitePath = $facts->getShopRootPath() . '/tests';
+        $testSuitePath = INSTALLATION_ROOT_PATH . '/tests';
     }
     return $testSuitePath;
 }
@@ -63,10 +62,5 @@ function getShopTestPath()
 
 function getMysqlConfigPath()
 {
-    $facts = new Facts();
-    $configFile = new ConfigFile($facts->getSourcePath() . '/config.inc.php');
-
-    $generator = new DatabaseDefaultsFileGenerator($configFile);
-
-    return $generator->generate();
+    return Path::join(INSTALLATION_ROOT_PATH, 'tests', 'Codeception', 'config', 'params.php');
 }

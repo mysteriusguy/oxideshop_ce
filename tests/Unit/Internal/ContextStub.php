@@ -10,6 +10,7 @@ declare(strict_types=1);
 namespace OxidEsales\EshopCommunity\Tests\Unit\Internal;
 
 use OxidEsales\EshopCommunity\Internal\Container\ContainerFactory;
+use OxidEsales\EshopCommunity\Internal\Transition\Utility\Context;
 use OxidEsales\EshopCommunity\Internal\Transition\Utility\ContextInterface;
 
 class ContextStub extends BasicContextStub implements ContextInterface
@@ -31,7 +32,7 @@ class ContextStub extends BasicContextStub implements ContextInterface
     public function __construct()
     {
         parent::__construct();
-        $context = ContainerFactory::getInstance()->getContainer()->get(ContextInterface::class);
+        $context = new Context();
         $this->logLevel = $context->getLogLevel();
         $this->shopIds = $context->getAllShopIds();
         $this->currentShopId = $context->getCurrentShopId();

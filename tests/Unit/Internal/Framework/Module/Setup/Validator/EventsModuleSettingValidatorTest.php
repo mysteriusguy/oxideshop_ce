@@ -18,6 +18,9 @@ use OxidEsales\EshopCommunity\Internal\Framework\Module\Configuration\DataObject
 
 class EventsModuleSettingValidatorTest extends TestCase
 {
+    /**
+     * @doesNotPerformAssertions
+     */
     public function testValidate()
     {
         $validator = $this->createValidator();
@@ -46,6 +49,7 @@ class EventsModuleSettingValidatorTest extends TestCase
     /**
      * This is needed only for the modules which has non namespaced classes.
      * This test MUST be removed when support for non namespaced modules will be dropped (metadata v1.*).
+     * @doesNotPerformAssertions
      */
     public function testDoNotValidateForNonNamespacedClasses()
     {
@@ -64,6 +68,7 @@ class EventsModuleSettingValidatorTest extends TestCase
      * @param Event $invalidEvent
      *
      * @throws \OxidEsales\EshopCommunity\Internal\Framework\Module\Setup\Exception\ModuleSettingNotValidException
+     * @doesNotPerformAssertions
      */
     public function testValidateDoesNotValidateSyntax($invalidEvent)
     {

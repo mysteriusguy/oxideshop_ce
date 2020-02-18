@@ -10,24 +10,23 @@ declare(strict_types=1);
 namespace OxidEsales\EshopCommunity\Tests\Integration\Core;
 
 use OxidEsales\Eshop\Core\ViewConfig;
-use OxidEsales\EshopCommunity\Internal\Container\ContainerFactory;
-use OxidEsales\EshopCommunity\Internal\Framework\Module\Install\DataObject\OxidEshopPackage;
-use OxidEsales\EshopCommunity\Internal\Framework\Module\Install\Service\ModuleInstallerInterface;
-use OxidEsales\EshopCommunity\Internal\Framework\Module\Setup\Bridge\ModuleActivationBridgeInterface;
+use OxidEsales\EshopCommunity\Tests\TestUtils\Traits\ModuleTestingTrait;
 use PHPUnit\Framework\TestCase;
 
 final class ViewConfigTest extends TestCase
 {
-    private $container;
+    use ModuleTestingTrait;
 
     public function setUp()
     {
-        $this->container = ContainerFactory::getInstance()->getContainer();
-
-        $this->container->get('oxid_esales.module.install.service.launched_shop_project_configuration_generator')
-            ->generate();
-
         parent::setUp();
+        $this->backupModuleSetup();
+    }
+
+    public function tearDown()
+    {
+        $this->restoreModuleSetup();
+        parent::tearDown();
     }
 
     public function testIsModuleActive(): void
@@ -41,18 +40,4 @@ final class ViewConfigTest extends TestCase
         $this->assertTrue($viewConfig->isModuleActive($moduleId));
     }
 
-    private function installModule(string $id): void
-    {
-        $package = new OxidEshopPackage($id, __DIR__ . '/Module/Fixtures/' . $id);
-        $package->setTargetDirectory('oeTest/' . $id);
-
-        $this->container->get(ModuleInstallerInterface::class)
-            ->install($package);
-    }
-
-    private function activateModule(string $id): void
-    {
-        $this->container->get(ModuleActivationBridgeInterface::class)
-            ->activate($id, 1);
-    }
 }

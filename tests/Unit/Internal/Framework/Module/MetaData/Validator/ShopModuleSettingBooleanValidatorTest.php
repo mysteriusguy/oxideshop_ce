@@ -39,6 +39,7 @@ class SettingBooleanValidatorTest extends TestCase
      *
      * @deprecated   since v6.4.0 (2019-06-10);This is not recommended values for use,
      *               only boolean values should be used.
+     * @doesNotPerformAssertions
      */
     public function testValidationPassWithBackwardsCompatibleValues($value)
     {
@@ -56,6 +57,7 @@ class SettingBooleanValidatorTest extends TestCase
     /**
      * @param bool $value
      * @dataProvider validationPassDataProvider
+     * @doesNotPerformAssertions
      */
     public function testValidationPass(bool $value)
     {
@@ -81,6 +83,9 @@ class SettingBooleanValidatorTest extends TestCase
         $this->executeValidationForBoolSetting($value);
     }
 
+    /**
+     * @doesNotPerformAssertions
+     */
     public function testWhenStringTypeProvided()
     {
         $settings =
@@ -97,6 +102,9 @@ class SettingBooleanValidatorTest extends TestCase
         $validator->validate($settings);
     }
 
+    /**
+     * @doesNotPerformAssertions
+     */
     public function testWhenNoTypeProvided()
     {
         $settings =

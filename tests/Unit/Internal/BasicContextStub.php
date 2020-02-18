@@ -10,6 +10,7 @@ declare(strict_types=1);
 namespace OxidEsales\EshopCommunity\Tests\Unit\Internal;
 
 use OxidEsales\EshopCommunity\Internal\Container\BootstrapContainerFactory;
+use OxidEsales\EshopCommunity\Internal\Transition\Utility\BasicContext;
 use OxidEsales\EshopCommunity\Internal\Transition\Utility\BasicContextInterface;
 
 /**
@@ -34,7 +35,7 @@ class BasicContextStub implements BasicContextInterface
     public function __construct()
     {
         /** @var BasicContextInterface $basicContext */
-        $basicContext = BootstrapContainerFactory::getBootstrapContainer()->get(BasicContextInterface::class);
+        $basicContext = new BasicContext();
 
         $this->communityEditionSourcePath = $basicContext->getCommunityEditionSourcePath();
         $this->containerCacheFilePath = $basicContext->getContainerCacheFilePath();

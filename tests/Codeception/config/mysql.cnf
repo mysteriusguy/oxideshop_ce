@@ -1,0 +1,5 @@
+[client]
+user="oxid"
+password="oxid"
+host="localhost"
+port="3306"

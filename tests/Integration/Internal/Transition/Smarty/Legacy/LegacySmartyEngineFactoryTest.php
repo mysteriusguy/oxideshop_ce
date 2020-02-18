@@ -10,7 +10,7 @@ declare(strict_types=1);
 namespace OxidEsales\EshopCommunity\Tests\Integration\Internal\Transition\Smarty\Legacy;
 
 use OxidEsales\EshopCommunity\Internal\Framework\Smarty\Legacy\LegacySmartyEngine;
-use OxidEsales\EshopCommunity\Tests\Integration\Internal\TestContainerFactory;
+use OxidEsales\EshopCommunity\Tests\TestUtils\TestContainerFactory;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 class LegacySmartyEngineFactoryTest extends \PHPUnit\Framework\TestCase

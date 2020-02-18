@@ -27,18 +27,23 @@
         "symfony/filesystem": "^3.4"
     },
     "require-dev": {
+        "mikey179/vfsstream": "~1.4.0",
         "oxid-esales/flow-theme": "dev-master",
         "oxid-esales/oxideshop-doctrine-migration-wrapper": "^v2.1.2",
         "oxid-esales/oxideshop-db-views-generator": "^v1.2.0",
         "oxid-esales/oxideshop-demodata-installer": "^v1.1.2",
         "oxid-esales/oxideshop-composer-plugin": "dev-master",
         "oxid-esales/oxideshop-unified-namespace-generator": "^2.0.0",
-        "oxid-esales/testing-library": "dev-master",
         "oxid-esales/coding-standards-wrapper": "^v3.0.0",
         "incenteev/composer-parameter-handler": "~v2.0",
         "oxid-esales/oxideshop-ide-helper": "^3.0",
         "oxid-esales/azure-theme": "dev-master",
-        "oxid-esales/oxideshop-facts": "^2.3.1"
+        "phpunit/phpunit": "^7",
+        "codeception/codeception": "^3.1",
+        "oxid-esales/codeception-modules": "*",
+        "oxid-esales/oxideshop-facts": "^2.3.1",
+        "oxid-esales/testing-utils": "*",
+        "oxid-esales/codeception-page-objects": "^1.1"
     },
     "autoload": {
         "psr-4": {
@@ -54,6 +59,14 @@
     "prefer-stable": true,
     "bin": ["bin/oe-console"],
     "scripts": {
+        "oe:ide-helper:generate": [
+            "if [ -f ./vendor/bin/oe-eshop-ide_helper ]; then oe-eshop-ide_helper; fi"
+        ],
+        "phpunit": [
+            "./vendor/bin/phpunit --debug --configuration phpunit.xml"
+        ]
+    },
+    "extra": {
         "post-install-cmd": [
             "Incenteev\\ParameterHandler\\ScriptHandler::buildParameters",
             "@oe:ide-helper:generate"
@@ -64,9 +77,7 @@
         ],
         "oe:ide-helper:generate": [
             "if [ -f ./vendor/bin/oe-eshop-ide_helper ]; then oe-eshop-ide_helper; fi"
-        ]
-    },
-    "extra": {
+        ],
         "oxideshop": {
             "blacklist-filter": [
                 "Application/Component/**/*",
@@ -75,16 +86,20 @@
                 "Core/**/*",
                 "Internal/**/*"
             ]
+        }
+    },
+    "repositories": {
+        "oxid-esales/traditional-testing": {
+            "type": "path",
+            "url": "/home/michael/workspace/traditional_testing"
         },
-        "incenteev-parameters": {
-            "file": "test_config.yml",
-            "dist-file": "vendor/oxid-esales/testing-library/test_config.yml.dist",
-            "parameter-key": "mandatory_parameters",
-            "env-map": {
-                "shop_path": "SHOP_PATH",
-                "shop_tests_path": "SHOP_TESTS_PATH",
-                "partial_module_paths": "PARTIAL_MODULE_PATHS"
-            }
+        "oxid-esales/codeception-modules": {
+            "type": "path",
+            "url": "/home/michael/workspace/codeception-modules"
+        },
+        "oxid-esales/testing-utils": {
+            "type": "path",
+            "url": "/home/michael/workspace/testing-utils"
         }
     }
 }

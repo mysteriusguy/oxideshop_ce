@@ -14,9 +14,10 @@ use OxidEsales\EshopCommunity\Internal\Transition\Utility\BasicContext;
 use OxidEsales\EshopCommunity\Internal\Transition\Utility\ContextInterface;
 use OxidEsales\EshopCommunity\Tests\Unit\Internal\ContextStub;
 use OxidEsales\Facts\Facts;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
-class ShopAwareEventsTest extends \PHPUnit\Framework\TestCase
+class ShopAwareEventsTest extends TestCase
 {
     /**
      * @var \Symfony\Component\DependencyInjection\ContainerBuilder

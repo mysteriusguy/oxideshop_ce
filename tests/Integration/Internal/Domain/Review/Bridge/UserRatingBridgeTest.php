@@ -16,9 +16,18 @@ use OxidEsales\EshopCommunity\Internal\Domain\Review\Bridge\UserRatingBridge;
 use OxidEsales\EshopCommunity\Internal\Domain\Review\Exception\RatingPermissionException;
 use OxidEsales\EshopCommunity\Internal\Domain\Review\Service\UserRatingService;
 use OxidEsales\EshopCommunity\Internal\Domain\Review\Service\UserRatingServiceInterface;
+use OxidEsales\EshopCommunity\Tests\TestUtils\Traits\DatabaseTestingTrait;
 
 class UserRatingBridgeTest extends \PHPUnit\Framework\TestCase
 {
+    use DatabaseTestingTrait;
+
+    public function setUp()
+    {
+        parent::setUp();
+        $this->setupTestDatabase();
+    }
+
     public function testDeleteRating()
     {
         $this->createTestRating();

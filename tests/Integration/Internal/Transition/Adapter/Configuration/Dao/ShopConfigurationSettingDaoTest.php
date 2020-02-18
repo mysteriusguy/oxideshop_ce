@@ -9,10 +9,11 @@ declare(strict_types=1);
 
 namespace OxidEsales\EshopCommunity\Internal\Framework\Config\Dao;
 
+use Doctrine\DBAL\Query\QueryBuilder;
 use OxidEsales\Eshop\Core\Registry;
 use OxidEsales\EshopCommunity\Internal\Framework\Config\DataObject\ShopConfigurationSetting;
 use OxidEsales\EshopCommunity\Internal\Framework\Database\QueryBuilderFactoryInterface;
-use OxidEsales\EshopCommunity\Tests\Integration\Internal\ContainerTrait;
+use OxidEsales\EshopCommunity\Tests\TestUtils\Traits\ContainerTrait;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -21,6 +22,21 @@ use PHPUnit\Framework\TestCase;
 class ShopConfigurationSettingDaoTest extends TestCase
 {
     use ContainerTrait;
+
+    public function tearDown()
+    {
+        parent::tearDown();
+
+        /** @var QueryBuilder $queryBuilder */
+        $queryBuilder = $this->get(QueryBuilderFactoryInterface::class)->create();
+        $queryBuilder
+            ->delete('oxconfig')
+            ->where($queryBuilder->expr()->like('oxvarname', ":varname"))
+            ->setParameter('varname', 'test%');
+
+        $queryBuilder->execute();
+
+    }
 
     /**
      * @dataProvider settingValueDataProvider

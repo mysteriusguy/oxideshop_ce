@@ -24,11 +24,11 @@ use OxidEsales\EshopCommunity\Internal\Framework\Module\Path\ModulePathResolverI
 use OxidEsales\EshopCommunity\Internal\Framework\Module\Setting\Setting;
 use OxidEsales\EshopCommunity\Internal\Framework\Module\Setup\Service\ModuleActivationServiceInterface;
 use OxidEsales\EshopCommunity\Internal\Framework\Module\State\ModuleStateServiceInterface;
-use OxidEsales\EshopCommunity\Tests\Integration\Internal\ContainerTrait;
 use OxidEsales\EshopCommunity\Tests\Integration\Internal\Framework\Module\TestData\TestModule\SomeModuleService;
 use OxidEsales\EshopCommunity\Tests\Integration\Internal\Module\TestData\TestModule\TestEvent;
-use OxidEsales\EshopCommunity\Tests\Integration\Internal\TestContainerFactory;
-use OxidEsales\TestingLibrary\Services\Library\DatabaseRestorer\DatabaseRestorer;
+use OxidEsales\EshopCommunity\Tests\TestUtils\TestContainerFactory;
+use OxidEsales\EshopCommunity\Tests\TestUtils\Traits\DatabaseTestingTrait;
+use OxidEsales\EshopCommunity\Tests\TestUtils\Traits\ModuleSettingsRestorer;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
 use OxidEsales\EshopCommunity\Internal\Framework\Module\Configuration\DataObject\ModuleConfiguration\ClassExtension;
@@ -43,30 +43,28 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
  */
 class ModuleActivationServiceTest extends TestCase
 {
-    /**
-     * @var ContainerInterface
-     */
-    private $container;
+
     private $shopId = 1;
     private $testModuleId = 'testModuleId';
     private $databaseRestorer;
     private $testContainerFactory = null;
 
-    use ContainerTrait;
+    use DatabaseTestingTrait;
+
+    private $moduleSettingsRestorer;
 
     public function setUp()
     {
         $this->container = $this->setupAndConfigureContainer();
-
-        $this->databaseRestorer = new DatabaseRestorer();
-        $this->databaseRestorer->dumpDB(__CLASS__);
+        $this->moduleSettingsRestorer = new ModuleSettingsRestorer();
+        $this->moduleSettingsRestorer->backupModuleSettings();
 
         parent::setUp();
     }
 
     protected function tearDown()
     {
-        $this->databaseRestorer->restoreDB(__CLASS__);
+        $this->moduleSettingsRestorer->restoreModuleSettings();
 
         parent::tearDown();
     }
@@ -174,7 +172,6 @@ class ModuleActivationServiceTest extends TestCase
         $moduleActivationService->activate($this->testModuleId, $this->shopId);
 
         // We need a new container to assert that the even subscriber now is active
-        $this->container = $this->setupAndConfigureContainer();
         /** @var EventDispatcher $eventDispatcher */
         $eventDispatcher = $this->container->get(EventDispatcherInterface::class);
         /** @var TestEvent $event */
@@ -327,6 +324,8 @@ class ModuleActivationServiceTest extends TestCase
             $this->testContainerFactory = new TestContainerFactory();
         }
         $container = $this->testContainerFactory->create();
+
+        $this->setupTestDatabase();
 
         $container->set(ModulePathResolverInterface::class, $this->getModulePathResolverMock());
         $container->autowire(ModulePathResolverInterface::class, ModulePathResolver::class);
