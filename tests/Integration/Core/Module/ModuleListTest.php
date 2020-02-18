@@ -16,45 +16,26 @@ use OxidEsales\Eshop\Core\Registry;
 use OxidEsales\EshopCommunity\Internal\Container\ContainerFactory;
 use OxidEsales\EshopCommunity\Internal\Framework\Module\Configuration\Bridge\ShopConfigurationDaoBridgeInterface;
 use OxidEsales\EshopCommunity\Internal\Framework\Module\Configuration\DataObject\ModuleConfiguration;
-use OxidEsales\EshopCommunity\Internal\Framework\Module\Install\DataObject\OxidEshopPackage;
-use OxidEsales\EshopCommunity\Internal\Framework\Module\Install\Service\ModuleInstallerInterface;
 use OxidEsales\EshopCommunity\Internal\Framework\Module\Setup\Bridge\ModuleActivationBridgeInterface;
-use OxidEsales\EshopCommunity\Internal\Transition\Utility\ContextInterface;
+use OxidEsales\EshopCommunity\Tests\TestUtils\Traits\ModuleTestingTrait;
 use PHPUnit\Framework\TestCase;
-use Psr\Container\ContainerInterface;
 
 /**
  * @internal
  */
 class ModuleListTest extends TestCase
 {
-    /**
-     * @var ContainerInterface
-     */
-    private $container;
+    use ModuleTestingTrait;
 
-    public function setup(): void
-    {
-        $this->container = ContainerFactory::getInstance()->getContainer();
-
-        $this->container
-            ->get('oxid_esales.module.install.service.launched_shop_project_configuration_generator')
-            ->generate();
-
+    public function setUp() {
         parent::setUp();
+        $this->backupModuleSetup();
     }
 
-    public function tearDown(): void
+    public function tearDown()
     {
+        $this->restoreModuleSetup();
         parent::tearDown();
-
-        $this->removeTestModules();
-
-        $this->container
-            ->get('oxid_esales.module.install.service.launched_shop_project_configuration_generator')
-            ->generate();
-
-        Registry::getConfig()->saveShopConfVar('aarr', 'activeModules', []);
     }
 
     public function testDisabledModules()
@@ -128,7 +109,9 @@ class ModuleListTest extends TestCase
 
         $moduleList->cleanup();
 
-        $moduleActivationBridge = $this->container->get(ModuleActivationBridgeInterface::class);
+        $moduleActivationBridge = ContainerFactory::getInstance()
+            ->getContainer()
+            ->get(ModuleActivationBridgeInterface::class);
 
         $this->assertFalse(
             $moduleActivationBridge->isActive('with_metadata_v21', 1)
@@ -151,7 +134,9 @@ class ModuleListTest extends TestCase
 
     public function testGetDeletedExtensionsForModuleWithNoMetadata()
     {
-        $shopConfigurationDao = $this->container->get(ShopConfigurationDaoBridgeInterface::class);
+        $container = ContainerFactory::getInstance()->getContainer();
+
+        $shopConfigurationDao = $container->get(ShopConfigurationDaoBridgeInterface::class);
         $shopConfiguration = $shopConfigurationDao->get();
 
         $moduleWhichHasNoMetadata = new ModuleConfiguration();
@@ -162,7 +147,7 @@ class ModuleListTest extends TestCase
         $shopConfiguration->addModuleConfiguration($moduleWhichHasNoMetadata);
         $shopConfigurationDao->save($shopConfiguration);
 
-        $this->container->get(ModuleActivationBridgeInterface::class)->activate(
+        $container->get(ModuleActivationBridgeInterface::class)->activate(
             'moduleWhichHasNoMetadata',
             Registry::getConfig()->getShopId()
         );
@@ -191,7 +176,6 @@ class ModuleListTest extends TestCase
         $this->installModule($moduleId);
         $this->activateModule($moduleId);
 
-
         $module = oxNew(Module::class);
         $module->load($moduleId);
 
@@ -199,7 +183,8 @@ class ModuleListTest extends TestCase
             [
                 $moduleId => [
                     'extensions' => [
-                        'OxidEsales\Eshop\Application\Model\Article' => ['OxidEsales\EshopCommunity\Tests\Acceptance\Admin\testData\modules\oxid\InvalidNamespaceModule1\Model\NonExistentFile'],
+                        'OxidEsales\Eshop\Application\Model\Article' =>
+                            ['OxidEsales\EshopCommunity\Tests\Integration\Core\Module\Fixtures\InvalidNamespaceModule\Controller\NonExistentFile'],
                     ]
                 ],
             ],
@@ -276,25 +261,5 @@ class ModuleListTest extends TestCase
         $this->installModule('with_class_extensions2');
 
         $this->assertSame($extensions, oxNew(ModuleList::class)->getModules());
-    }
-
-    private function installModule(string $id)
-    {
-        $package = new OxidEshopPackage($id, __DIR__ . '/Fixtures/' . $id);
-        $package->setTargetDirectory('oeTest/' . $id);
-
-        $this->container->get(ModuleInstallerInterface::class)
-            ->install($package);
-    }
-
-    private function activateModule(string $id)
-    {
-        $this->container->get(ModuleActivationBridgeInterface::class)->activate($id, 1);
-    }
-
-    private function removeTestModules()
-    {
-        $fileSystem = $this->container->get('oxid_esales.symfony.file_system');
-        $fileSystem->remove($this->container->get(ContextInterface::class)->getModulesPath() . '/oeTest/');
     }
 }

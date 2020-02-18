@@ -17,13 +17,31 @@ use OxidEsales\EshopCommunity\Internal\Domain\Review\Bridge\ProductRatingBridge;
 use OxidEsales\EshopCommunity\Internal\Domain\Review\Bridge\ProductRatingBridgeInterface;
 use OxidEsales\EshopCommunity\Internal\Domain\Review\Dao\ProductRatingDao;
 use OxidEsales\EshopCommunity\Internal\Domain\Review\Service\ProductRatingService;
+use OxidEsales\EshopCommunity\Tests\TestUtils\Traits\DatabaseTestingTrait;
 
 class ProductRatingBridgeTest extends \PHPUnit\Framework\TestCase
 {
-    public function testUpdateProductRating()
+    use DatabaseTestingTrait;
+
+    private $ratingIds = [];
+
+    public function setUp()
     {
+        parent::setUp();
+        $this->setupTestDatabase();
         $this->createTestProduct();
         $this->createTestRatings();
+    }
+
+    public function tearDown()
+    {
+        $this->deleteTestRatings();
+        $this->deleteTestProduct();
+        parent::tearDown();
+    }
+
+    public function testUpdateProductRating()
+    {
 
         $productRatingBridge = $this->getProductRatingBridge();
         $productRatingBridge->updateProductRating('testProduct');
@@ -49,25 +67,46 @@ class ProductRatingBridgeTest extends \PHPUnit\Framework\TestCase
         $product->save();
     }
 
+    private function deleteTestProduct()
+    {
+        $product = oxNew(Article::class);
+        $product->load('testProduct');
+        $product->delete();
+    }
+
     private function createTestRatings()
     {
+        $this->ratingIds = [];
+
         $rating = oxNew(Rating::class);
         $rating->oxratings__oxobjectid = new Field('testProduct');
         $rating->oxratings__oxtype = new Field('oxarticle');
         $rating->oxratings__oxrating = new Field(3);
         $rating->save();
+        $this->ratingIds[] = $rating->getId();
 
         $rating = oxNew(Rating::class);
         $rating->oxratings__oxobjectid = new Field('testProduct');
         $rating->oxratings__oxtype = new Field('oxarticle');
         $rating->oxratings__oxrating = new Field(4);
         $rating->save();
+        $this->ratingIds[] = $rating->getId();
 
         $rating = oxNew(Rating::class);
         $rating->oxratings__oxobjectid = new Field('testProduct');
         $rating->oxratings__oxtype = new Field('oxarticle');
         $rating->oxratings__oxrating = new Field(5);
         $rating->save();
+        $this->ratingIds[] = $rating->getId();
+    }
+
+    private function deleteTestRatings()
+    {
+        $rating = oxNew(Rating::class);
+        foreach ($this->ratingIds as $id) {
+            $rating->load($id);
+            $rating->delete();
+        }
     }
 
     private function getProductRatingBridge()

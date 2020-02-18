@@ -9,17 +9,21 @@ declare(strict_types=1);
 
 namespace OxidEsales\EshopCommunity\Tests\Integration\Internal\Framework\Module\Command;
 
-use OxidEsales\Eshop\Core\Module\Module;
 use OxidEsales\EshopCommunity\Internal\Framework\Module\Command\ModuleActivateCommand;
 use OxidEsales\EshopCommunity\Internal\Framework\Module\Setup\Bridge\ModuleActivationBridgeInterface;
+use OxidEsales\EshopCommunity\Internal\Framework\Module\State\ModuleStateServiceInterface;
 use Symfony\Component\Console\Input\ArrayInput;
 
+/**
+ * @group template_dir
+ * Class ModuleActivateCommandTest
+ * @package OxidEsales\EshopCommunity\Tests\Integration\Internal\Framework\Module\Command
+ */
 final class ModuleActivateCommandTest extends ModuleCommandsTestCase
 {
+
     public function testModuleActivation(): void
     {
-        $this->installTestModule();
-
         $consoleOutput = $this->execute(
             $this->getApplication(),
             $this->get('oxid_esales.console.commands_provider.services_commands_provider'),
@@ -31,17 +35,14 @@ final class ModuleActivateCommandTest extends ModuleCommandsTestCase
             $consoleOutput
         );
 
-        $module = oxNew(Module::class);
-        $module->load($this->moduleId);
-        $this->assertTrue($module->isActive());
+        $this->assertTrue(
+            $this->get(ModuleStateServiceInterface::class)->isActive($this->moduleId, 1)
+        );
 
-        $this->cleanupTestData();
     }
 
     public function testWhenModuleAlreadyActive(): void
     {
-        $this->installTestModule();
-
         $this->get(ModuleActivationBridgeInterface::class)->activate($this->moduleId, 1);
 
         $consoleOutput = $this->execute(
@@ -55,7 +56,6 @@ final class ModuleActivateCommandTest extends ModuleCommandsTestCase
             $consoleOutput
         );
 
-        $this->cleanupTestData();
     }
 
     public function testNonExistingModuleActivation(): void

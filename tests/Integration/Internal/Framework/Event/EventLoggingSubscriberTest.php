@@ -14,10 +14,10 @@ use OxidEsales\EshopCommunity\Internal\Framework\Module\Setup\Event\ServicesYaml
 use OxidEsales\EshopCommunity\Internal\Transition\Utility\ContextInterface;
 use OxidEsales\EshopCommunity\Tests\Unit\Internal\BasicContextStub;
 use OxidEsales\EshopCommunity\Tests\Unit\Internal\ContextStub;
-use OxidEsales\TestingLibrary\UnitTestCase;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
-class EventLoggingSubscriberTest extends UnitTestCase
+class EventLoggingSubscriberTest extends TestCase
 {
     /** @var \Symfony\Component\DependencyInjection\ContainerBuilder $container */
     private $container;

@@ -15,8 +15,14 @@ use OxidEsales\EshopCommunity\Internal\Framework\Config\DataObject\ShopConfigura
 use OxidEsales\EshopCommunity\Internal\Framework\Config\DataObject\ShopSettingType;
 use OxidEsales\EshopCommunity\Internal\Framework\Module\Install\DataObject\OxidEshopPackage;
 use OxidEsales\EshopCommunity\Internal\Framework\Module\Install\Service\ModuleInstallerInterface;
+use OxidEsales\EshopCommunity\Internal\Framework\Module\Path\ModulePathResolverInterface;
+use OxidEsales\EshopCommunity\Internal\Framework\Module\State\ModuleStateService;
+use OxidEsales\EshopCommunity\Internal\Transition\Utility\ContextInterface;
 use OxidEsales\EshopCommunity\Tests\Integration\Internal\Framework\Console\ConsoleTrait;
-use OxidEsales\EshopCommunity\Tests\Integration\Internal\ContainerTrait;
+use OxidEsales\EshopCommunity\Tests\TestUtils\Traits\ContainerTrait;
+use OxidEsales\EshopCommunity\Tests\TestUtils\Traits\ConfigHandlingTrait;
+use OxidEsales\EshopCommunity\Tests\TestUtils\Traits\DatabaseTestingTrait;
+use OxidEsales\EshopCommunity\Tests\TestUtils\Traits\ModuleTestingTrait;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Filesystem\Filesystem;
@@ -27,12 +33,29 @@ use Webmozart\PathUtil\Path;
  */
 class ModuleCommandsTestCase extends TestCase
 {
-    use ContainerTrait;
+    use DatabaseTestingTrait;
     use ConsoleTrait;
+    use ConfigHandlingTrait;
+    use ModuleTestingTrait;
 
     protected $modulesPath = __DIR__ . '/Fixtures/modules/';
 
     protected $moduleId = 'testmodule';
+
+    public function setUp()
+    {
+        parent::setUp();
+        $this->setupTestDatabase();
+        $this->backupModuleSetup();
+        $this->installTestModule();
+    }
+
+    public function tearDown()
+    {
+        $this->restoreModuleSetup();
+        $this->cleanupTestModule();
+        parent::tearDown();
+    }
 
     /**
      * @return Application
@@ -70,5 +93,14 @@ class ModuleCommandsTestCase extends TestCase
                     Path::join($this->modulesPath, $this->moduleId)
                 )
             );
+    }
+
+    protected function cleanupTestModule(): void
+    {
+        /** @var Filesystem $fileSystem */
+        $fileSystem = $this->get('oxid_esales.symfony.file_system');
+        $fileSystem->remove(
+            Path::join($this->get(ContextInterface::class)->getModulesPath(), $this->moduleId)
+        );
     }
 }
