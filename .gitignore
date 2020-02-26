@@ -43,3 +43,6 @@
 # DI for modules and packages
 /var/generated_services.yaml
 /tests/Integration/Internal/Container/Dao/generated_project.yaml
+
+/tests/Codeception/_output
+/tests/Codeception/_support/_generated
