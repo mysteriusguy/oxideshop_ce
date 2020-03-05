@@ -26,6 +26,7 @@ class UserRegistrationCest
         $userRegistration = new UserRegistration($I);
         $I->wantToTest('simple user account opening');
 
+        $I->updateConfigInDatabase('blShowBirthdayFields', true, 'bool');
         // prepare user data
         $userId = '1';
         $userLoginData = $this->getUserLoginData($userId);
@@ -50,6 +51,10 @@ class UserRegistrationCest
         $userRegistration = new UserRegistration($I);
         $start = new Start($I);
         $I->wantToTest('the user standard registration and the newsletter subscription with the same email');
+
+        $I->updateConfigInDatabase('blFooterShowNewsletterForm', true, 'bool');
+        $I->updateConfigInDatabase('blShowBirthdayFields', true, 'bool');
+        $I->updateConfigInDatabase('blOrderOptInEmail', true, 'bool');
 
         // prepare user data
         $userId = '7';
@@ -87,6 +92,7 @@ class UserRegistrationCest
         $I->wantToTest('the user newsletter subscription and the user account creation without registration with the same email in checkout');
         $I->openShop();
 
+        $I->updateConfigInDatabase('blShowBirthdayFields', true, 'bool');
         // prepare user data
         $userId = '2';
         $userLoginData = $this->getUserLoginData($userId);
@@ -131,6 +137,7 @@ class UserRegistrationCest
         $basket = new Basket($I);
         $I->wantTo('register user account in the checkout process');
 
+        $I->updateConfigInDatabase('blShowBirthdayFields', true, 'bool');
         // prepare user data
         $userId = '3';
         $userPassword = 'user33';
@@ -174,6 +181,22 @@ class UserRegistrationCest
         $checkout = new UserRegistrationInCheckout($I);
         $I->wantTo('create user account without registration twice in the checkout process');
 
+        /*$data = [
+            'OXID' => 'oxnopaymentmethod',
+            'OXLOADID' => 'oxnopaymentmethod',
+            'OXSHOPID' => 1,
+            'OXSNIPPET' => 1,
+            'OXTYPE' => 0,
+            'OXACTIVE' => 1,
+            'OXTITLE' => 'No payment method text',
+            'OXCONTENT' => '<p>Derzeit ist keine Versandart für dieses Land\r\ndefiniert.</p>\r\n<p>Wir werden versuchen, Liefermöglichkeiten zu\r\nfinden und Sie über die Versandkosten informieren.</p>',
+            'OXTITLE_1' => 'No payment method text',
+            'OXCONTENT_1' => '<p>Currently we have no shipping method set up\r\nfor this country.</p>\r\n<p>We are aiming to find a possible delivery\r\nmethod and we will inform you as soon as possible via e-mail about the result,\r\nincluding further information about delivery costs.</p>',
+        ];
+        $I->haveInDatabase('oxcontents', $data);*/
+
+
+        $I->updateConfigInDatabase('blShowBirthdayFields', true, 'bool');
         // prepare user data
         $userId = '4';
         $userLoginData = $this->getUserLoginData($userId);
@@ -231,6 +254,7 @@ class UserRegistrationCest
         $checkout = new UserRegistrationInCheckout($I);
         $I->wantTo('create user account without registration and later with registration in checkout process');
 
+        $I->updateConfigInDatabase('blShowBirthdayFields', true, 'bool');
         // prepare user data
         $userId = '5';
         $userLoginData = $this->getUserLoginData($userId);
@@ -256,7 +280,7 @@ class UserRegistrationCest
         // prepare user data second step
         $userId = '5_3';
         $userPassword = 'user55';
-        $userCountry = 'Austria';
+        $userCountry = 'Germany';
         $userLoginData = $this->getUserLoginData('5', $userPassword);
         $userData = $this->getUserData($userId);
         $addressData = $this->getUserAddressData($userId, $userCountry);
@@ -290,6 +314,7 @@ class UserRegistrationCest
         $checkout = new UserRegistrationInCheckout($I);
         $I->wantTo('create registered user account twice by using wrong password second time');
 
+        $I->updateConfigInDatabase('blShowBirthdayFields', true, 'bool');
         // prepare user data
         $userId = '6';
         $userPassword = 'user66';
@@ -341,6 +366,8 @@ class UserRegistrationCest
         $checkout = new UserRegistrationInCheckout($I);
         $I->wantTo('create not registered user account in the checkout and subscribe newsletter with the same email');
 
+        $I->updateConfigInDatabase('blShowBirthdayFields', true, 'bool');
+        $I->updateConfigInDatabase('blFooterShowNewsletterForm', true, 'bool');
         // prepare user data
         $userId = '8';
         $userLoginData = $this->getUserLoginData($userId);
@@ -383,6 +410,7 @@ class UserRegistrationCest
         $checkout = new UserRegistrationInCheckout($I);
         $I->wantToTest('user performs order with option3 twice, both time using good email and pass');
 
+        $I->updateConfigInDatabase('blShowBirthdayFields', true, 'bool');
         // prepare user data
         $userId = '9';
         $userPassword = 'user66';
@@ -405,7 +433,7 @@ class UserRegistrationCest
 
         // prepare user data for second step
         $userId = '9_3';
-        $userCountry = 'Austria';
+        $userCountry = 'Germany';
         $userLoginData2 = $this->getUserLoginData('9', $userPassword);
         $userData2 = $this->getUserData($userId);
         $addressData2 = $this->getUserAddressData($userId, $userCountry);
@@ -468,7 +496,7 @@ class UserRegistrationCest
             "faxNr" => "111-111-111-$userId",
             "countryId" => $userCountry,
         ];
-        if ($userCountry == 'Germany') {
+        if ($userCountry === 'Germany') {
             $addressData["stateId"] = "Berlin";
         }
         return $addressData;
