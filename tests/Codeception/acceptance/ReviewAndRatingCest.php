@@ -22,6 +22,7 @@ class ReviewAndRatingCest
     {
         $productNavigation = new ProductNavigation($I);
         $I->wantToTest('user account top menu (popup in top of the page)');
+        $I->updateConfigInDatabase('bl_perfLoadReviews', true, 'bool');
 
         $userData = $this->getExistingUserData();
         $userReviewText = 'user review [EN] šÄßüл for product 1000';
@@ -33,6 +34,7 @@ class ReviewAndRatingCest
             ->addReviewAndRating($userReviewText, $userRating)
             ->seeUserProductReviewAndRating(1, $userData['userName'], $userReviewText, $userRating);
         $I->deleteFromDatabase('oxreviews', ['OXUSERID' => $userData['userId']]);
+        $I->deleteFromDatabase('oxratings', ['OXUSERID' => $userData['userId']]);
     }
 
     /**
@@ -45,6 +47,7 @@ class ReviewAndRatingCest
     {
         $productNavigation = new ProductNavigation($I);
         $I->wantToTest('if parent reviews are shown correctly for variant product');
+        $I->updateConfigInDatabase('bl_perfLoadReviews', true, 'bool');
 
         $reviewData = [
             'text' => 'review for parent product šÄßüл',
@@ -81,7 +84,15 @@ class ReviewAndRatingCest
             $reviewData2['text'],
             $reviewData2['rating']
         );
-        $I->deleteFromDatabase('oxreviews', ['OXUSERID' => 'testuser']);
+        $I->deleteFromDatabase('oxreviews', ['OXUSERID' => $userData['userId']]);
+        $I->deleteFromDatabase('oxratings', ['OXUSERID' => $userData['userId']]);
+    }
+
+    public function _failed(AcceptanceTester $I)
+    {
+        $userData = $this->getExistingUserData();
+        $I->deleteFromDatabase('oxreviews', ['OXUSERID' => $userData['userId']]);
+        $I->deleteFromDatabase('oxratings', ['OXUSERID' => $userData['userId']]);
     }
 
     /**
@@ -100,7 +111,7 @@ class ReviewAndRatingCest
             'OXUSERID' => $userId,
             'OXLANG' => '1',
             'OXRATING' => $review['rating'],
-            'OXCREATE' => '2008-04-03 00:00:00',
+            'OXCREATE' => date("Y-m-d H:i:s"),
         ];
 
         $I->haveInDatabase('oxreviews', $reviewData);

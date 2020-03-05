@@ -145,20 +145,7 @@ class CheckoutProcessCest
         $I->see('0,20 €', $orderPage->basketGiftCardGross);
         $I->see('92,10 €', $orderPage->basketTotalPrice);
 
-
-
-
-      /*  $this->assertEquals("101,00 €", $this->getText("//tr[@id='cartItem_1']//td[5]/s"), "price with discount not shown in basket");
-        $this->assertEquals("136,40 €", $this->getText("basketTotalNetto"), "Net price changed or didn't displayed");
-        $this->assertEquals("8,29 €", $this->getText("//div[@id='basketSummary']//tr[4]/td"), "VAT 10% changed");
-        $this->assertEquals("10,16 €", $this->getText("//div[@id='basketSummary']//tr[5]/td"), "VAT 19%changed");
-        $this->assertEquals("163,00 €", $this->getText("basketTotalProductsGross"), "Brut price changed or didn't displayed");
-        $this->assertEquals("%COUPON% (%NUMBER_2% 222222)", $this->clearString($this->getText("//div[@id='basketSummary']//tr[2]/th")), "Coupon changed or didn't displayed");
-        $this->assertEquals("0,00 €", $this->getText("basketDeliveryGross"), "Shipping price changed or didn't displayed");
-        $this->assertEquals("7,50 €", $this->getText("basketPaymentGross"), "Payment price changed or didn't displayed");
-        $this->assertEquals("0,90 €", $this->getText("basketWrappingGross"), "Wrapping price changed or didn't displayed");
-        $this->assertEquals("0,20 €", $this->getText("basketGiftCardGross"), "Card price changed or didn't displayed");
-        $this->assertEquals("163,45 €", $this->getText("basketGrandTotal"), "Grand total price changed or didn't displayed");*/
+        $I->updateInDatabase('oxvouchers', ["oxreserved" => 0], ["OXVOUCHERNR" => '123123']);
     }
 
     /**
@@ -298,6 +285,7 @@ class CheckoutProcessCest
         $breadCrumbName = Translator::translate("ADDRESS");
         $userCheckoutPage->seeOnBreadCrumb($breadCrumbName);
         $I->updateInDatabase('oxdiscount', ["OXACTIVE" => 0], ["OXID" => 'testcatdiscount']);
+        $I->updateInDatabase('oxvouchers', ["oxreserved" => 0], ["OXVOUCHERNR" => '123123']);
     }
 
     /**

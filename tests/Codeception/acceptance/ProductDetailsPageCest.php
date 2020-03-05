@@ -24,6 +24,8 @@ class ProductDetailsPageCest
         $productNavigation = new ProductNavigation($I);
         $I->wantToTest('multidimensional variants functionality in details page');
 
+        $I->updateConfigInDatabase('blUseMultidimensionVariants', true, 'bool');
+
         $data = [
             'OXID' => '1001411',
             'OXLONGDESC' => 'Test description',
@@ -131,9 +133,12 @@ class ProductDetailsPageCest
             'price' => '100,00 € *'
         ];
 
+        $I->updateConfigInDatabase('aSortCols', 'a:2:{i:0;s:7:"oxtitle";i:1;s:13:"oxvarminprice";}', 'arr');
+
         $searchListPage = $I->openShop()
             ->searchFor('100')
-            ->seeProductData($productData, 2);
+            ->selectSorting('oxtitle', 'asc')
+            ->seeProductData($productData, 3);
         $detailsPage = $searchListPage->openProductDetailsPage(2);
         $breadCrumb = sprintf(Translator::translate('SEARCH_RESULT'), '100');
         $detailsPage->seeOnBreadCrumb($breadCrumb);
@@ -146,7 +151,7 @@ class ProductDetailsPageCest
         $navigationText = Translator::translate('PRODUCT') . ' 2 ' . Translator::translate('OF') . ' 4';
         $I->see($navigationText);
         $detailsPage->openProductSearchList()
-            ->seeProductData($productData, 2);
+            ->seeProductData($productData, 3);
         $breadCrumb = Translator::translate('SEARCH');
         $detailsPage->seeOnBreadCrumb($breadCrumb);
     }
@@ -201,6 +206,7 @@ class ProductDetailsPageCest
         $productNavigation = new ProductNavigation($I);
         $I->wantTo('send the product suggestion email');
 
+        $I->updateConfigInDatabase('blAllowSuggestArticle', true, 'bool');
         $productData = [
             'id' => '1000',
             'title' => 'Test product 0 [EN] šÄßüл',
@@ -343,6 +349,7 @@ class ProductDetailsPageCest
         $productNavigation = new ProductNavigation($I);
         $I->wantToTest('Product\'s accessories');
 
+        $I->updateConfigInDatabase('bl_perfLoadAccessoires', true, 'bool');
         $productData = [
             'id' => '1000',
             'title' => 'Test product 0 [EN] šÄßüл',
@@ -378,6 +385,9 @@ class ProductDetailsPageCest
     {
         $productNavigation = new ProductNavigation($I);
         $I->wantToTest('similar products on details page');
+
+        $I->updateConfigInDatabase('bl_perfLoadSimilar', true, 'bool');
+        $I->updateConfigInDatabase('iNrofSimilarArticles', '5', 'str');
 
         $productData = [
             'id' => '1000',
@@ -415,6 +425,7 @@ class ProductDetailsPageCest
         $productNavigation = new ProductNavigation($I);
         $I->wantToTest('Product\'s crossselling on details page');
 
+        $I->updateConfigInDatabase('bl_perfLoadCrossselling', true, 'bool');
         $productData = [
             'id' => '1000',
             'title' => 'Test product 0 [EN] šÄßüл',
@@ -451,6 +462,10 @@ class ProductDetailsPageCest
     public function selectMultidimensionalVariantsInLists(AcceptanceTester $I)
     {
         $I->wantToTest('multidimensional variants functionality in lists');
+
+        $I->updateConfigInDatabase('blUseMultidimensionVariants', true, 'bool');
+        $I->updateConfigInDatabase('bl_perfLoadSelectListsInAList', true, 'bool');
+        $I->updateConfigInDatabase('bl_perfLoadSelectLists', true, 'bool');
 
         $productData = [
             'id' => '10014',
@@ -746,6 +761,12 @@ class ProductDetailsPageCest
      */
     private function preparePriceGroupDataForUser(AcceptanceTester $I, $userId, $priceGroupId)
     {
+        $data = [
+            'OXID' => $priceGroupId,
+            'OXACTIVE' => 1,
+            'OXTITLE' => $priceGroupId,
+        ];
+        $I->haveInDatabase('oxgroups', $data);
         $data = [
             'OXID' => 'obj2group' . $priceGroupId,
             'OXOBJECTID' => $userId,

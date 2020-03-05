@@ -22,6 +22,7 @@ class ListmaniaCest
     {
         $productNavigation = new ProductNavigation($I);
         $I->wantToTest('creation of the listmania');
+        $I->updateConfigInDatabase('bl_showListmania', true);
 
         $productData = [
             'id' => '1000',
@@ -46,9 +47,9 @@ class ListmaniaCest
             ->seeListData('recomm title1', 'recomm author1', 'recom introduction1')
             ->openListByTitle('recomm title1');
 
-        $userAccountPage =  $userListmaniaPage->openAccountPage();
-        $I->see(Translator::translate('MY_LISTMANIA'), $userAccountPage->dashboardListmaniaPanelHeader);
-        $I->see(Translator::translate('LISTS') . ' 1', $userAccountPage->dashboardListmaniaPanelContent);
+        $userListmaniaPage->openAccountPage();
+        $I->see(Translator::translate('MY_LISTMANIA'));
+        $I->see(Translator::translate('LISTS') . ' 1');
     }
 
     public function _failed(AcceptanceTester $I)
