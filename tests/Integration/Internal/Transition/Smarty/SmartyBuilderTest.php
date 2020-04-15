@@ -10,28 +10,29 @@ declare(strict_types=1);
 namespace OxidEsales\EshopCommunity\Tests\Integration\Internal\Smarty;
 
 use OxidEsales\EshopCommunity\Core\Registry;
-use OxidEsales\EshopCommunity\Internal\Transition\Utility\BasicContext;
 use OxidEsales\EshopCommunity\Internal\Framework\Smarty\Configuration\SmartyConfigurationFactoryInterface;
 use OxidEsales\EshopCommunity\Internal\Framework\Smarty\SmartyBuilder;
 use OxidEsales\EshopCommunity\Internal\Framework\Smarty\SmartyContext;
 use OxidEsales\EshopCommunity\Internal\Framework\Smarty\SmartyContextInterface;
+use OxidEsales\EshopCommunity\Internal\Transition\Utility\BasicContextInterface;
 use OxidEsales\EshopCommunity\Tests\TestUtils\Traits\ConfigHandlingTrait;
-use OxidEsales\EshopCommunity\Tests\TestUtils\Traits\DatabaseTestingTrait;
+use OxidEsales\EshopCommunity\Tests\TestUtils\Traits\ContainerTrait;
+use Webmozart\PathUtil\Path;
 
 class SmartyBuilderTest extends \PHPUnit\Framework\TestCase
 {
     use ConfigHandlingTrait;
-    use DatabaseTestingTrait;
+    use ContainerTrait;
 
     public function setup(): void
     {
         parent::setUp();
-        $this->backupConfig();
+        $this->setupIntegrationTest();
     }
 
     public function tearDown(): void
     {
-        $this->restoreConfig();
+        $this->tearDownTestContainer();
         parent::tearDown();
     }
 
@@ -56,7 +57,7 @@ class SmartyBuilderTest extends \PHPUnit\Framework\TestCase
 
         foreach ($smartySettings as $varName => $varValue) {
             $this->assertTrue(isset($smarty->$varName), $varName . ' setting was not set');
-            $this->assertEquals($varValue, $smarty->$varName, 'Not correct value of the smarts setting: ' . $varName);
+            $this->assertEquals($varValue, $smarty->$varName, 'Not correct value of the smarty setting: ' . $varName);
         }
     }
 
@@ -155,7 +156,7 @@ class SmartyBuilderTest extends \PHPUnit\Framework\TestCase
         $config->setConfigParam('blDemoShop', $securityMode);
         $config->setConfigParam('iDebug', 0);
 
-        return new SmartyContext(new BasicContext(), $config, Registry::getUtilsView());
+        return new SmartyContext($this->get(BasicContextInterface::class), $config, Registry::getUtilsView());
     }
 
     /**
@@ -168,5 +169,6 @@ class SmartyBuilderTest extends \PHPUnit\Framework\TestCase
     private function setupAndConfigureContainer($securityMode = false)
     {
         $this->overrideService(SmartyContextInterface::class, $this->getSmartyContext($securityMode));
+        $this->reloadTestContainer();
     }
 }

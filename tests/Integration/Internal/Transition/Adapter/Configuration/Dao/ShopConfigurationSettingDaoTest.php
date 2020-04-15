@@ -13,8 +13,8 @@ use Doctrine\DBAL\Query\QueryBuilder;
 use OxidEsales\Eshop\Core\Registry;
 use OxidEsales\EshopCommunity\Internal\Framework\Config\DataObject\ShopConfigurationSetting;
 use OxidEsales\EshopCommunity\Internal\Framework\Database\QueryBuilderFactoryInterface;
-use OxidEsales\EshopCommunity\Tests\Integration\Internal\ContainerTrait;
 use OxidEsales\EshopCommunity\Internal\Framework\Dao\EntryDoesNotExistDaoException;
+use OxidEsales\EshopCommunity\Tests\TestUtils\Traits\ContainerTrait;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -24,19 +24,16 @@ class ShopConfigurationSettingDaoTest extends TestCase
 {
     use ContainerTrait;
 
-    public function tearDown()
+    public function setUp(): void
     {
+        parent::setUp();
+        $this->setupIntegrationTest();
+    }
+
+    public function tearDown(): void
+    {
+        $this->tearDownTestContainer();
         parent::tearDown();
-
-        /** @var QueryBuilder $queryBuilder */
-        $queryBuilder = $this->get(QueryBuilderFactoryInterface::class)->create();
-        $queryBuilder
-            ->delete('oxconfig')
-            ->where($queryBuilder->expr()->like('oxvarname', ":varname"))
-            ->setParameter('varname', 'test%');
-
-        $queryBuilder->execute();
-
     }
 
     /**

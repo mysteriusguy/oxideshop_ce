@@ -19,14 +19,14 @@ class ModuleTest extends TestCase
 
     public function setup(): void
     {
-        $this->backupModuleSetup();
         parent::setUp();
+        $this->setupIntegrationTest();
     }
 
     public function tearDown(): void
     {
+        $this->tearDownTestContainer();
         parent::tearDown();
-        $this->restoreModuleSetup();
     }
 
     public function testIsActiveIfModuleIsActive()

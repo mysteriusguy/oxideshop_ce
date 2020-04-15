@@ -27,14 +27,16 @@ class ModuleListTest extends TestCase
 {
     use ModuleTestingTrait;
 
-    public function setUp() {
+
+    public function setUp(): void
+    {
         parent::setUp();
-        $this->backupModuleSetup();
+        $this->setupIntegrationTest();
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
-        $this->restoreModuleSetup();
+        $this->tearDownTestContainer();
         parent::tearDown();
     }
 
@@ -106,7 +108,6 @@ class ModuleListTest extends TestCase
                     'with_metadata_v21' => 'someExtension',
                 ]
             );
-
         $moduleList->cleanup();
 
         $moduleActivationBridge = ContainerFactory::getInstance()

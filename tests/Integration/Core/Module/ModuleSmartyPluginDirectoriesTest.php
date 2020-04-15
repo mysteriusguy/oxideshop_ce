@@ -21,17 +21,16 @@ class ModuleSmartyPluginDirectoriesTest extends TestCase
     public function setup(): void
     {
         parent::setUp();
-        $this->backupModuleSetup();
-
+        $this->setupIntegrationTest();
         $module = 'with_metadata_v21';
-        $this->installModule('with_metadata_v21');
-        $this->activateModule('with_metadata_v21');
+        $this->installModule($module);
+        $this->activateModule($module);
 
     }
 
     public function tearDown(): void
     {
-        $this->restoreModuleSetup();
+        $this->tearDownTestContainer();
         parent::tearDown();
     }
 

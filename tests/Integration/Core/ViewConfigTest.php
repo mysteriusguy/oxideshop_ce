@@ -20,12 +20,12 @@ final class ViewConfigTest extends TestCase
     public function setup(): void
     {
         parent::setUp();
-        $this->backupModuleSetup();
+        $this->setupIntegrationTest();
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
-        $this->restoreModuleSetup();
+        $this->tearDownTestContainer();
         parent::tearDown();
     }
 

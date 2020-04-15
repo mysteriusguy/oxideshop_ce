@@ -14,7 +14,7 @@ use OxidEsales\EshopCommunity\Internal\Framework\Smarty\SmartyContextInterface;
 
 class SmartySecuritySettingsDataProviderTest extends \PHPUnit\Framework\TestCase
 {
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         new \Smarty(); // Initalize constants

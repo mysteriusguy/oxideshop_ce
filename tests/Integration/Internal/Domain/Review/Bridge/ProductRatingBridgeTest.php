@@ -25,18 +25,19 @@ class ProductRatingBridgeTest extends \PHPUnit\Framework\TestCase
 
     private $ratingIds = [];
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
-        $this->setupTestDatabase();
+        $this->setupIntegrationTest();
         $this->createTestProduct();
         $this->createTestRatings();
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         $this->deleteTestRatings();
         $this->deleteTestProduct();
+        $this->tearDownTestContainer();
         parent::tearDown();
     }
 
