@@ -18,7 +18,6 @@ use OxidEsales\EshopCommunity\Internal\Framework\Module\Install\Service\ModuleIn
 use OxidEsales\EshopCommunity\Internal\Transition\Utility\ContextInterface;
 use OxidEsales\EshopCommunity\Tests\Integration\Internal\Framework\Console\ConsoleTrait;
 use OxidEsales\EshopCommunity\Tests\TestUtils\Traits\ContainerTrait;
-use OxidEsales\EshopCommunity\Tests\TestUtils\Traits\DatabaseTestingTrait;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Filesystem\Filesystem;

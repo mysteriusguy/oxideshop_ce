@@ -26,7 +26,7 @@
         "symfony/finder": "^5.0.4",
         "symfony/filesystem": "^5.0.4",
         "codeception/module-webdriver": "^1.0",
-        "codeception/module-db": "^1.0"
+        "codeception/module-db": "^1.0",
         "oxid-esales/oxideshop-demodata-ce": "dev-master"
     },
     "require-dev": {

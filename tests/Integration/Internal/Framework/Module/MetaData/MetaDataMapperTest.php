@@ -14,10 +14,8 @@ use OxidEsales\EshopCommunity\Internal\Framework\Module\MetaData\Exception\Modul
 use OxidEsales\EshopCommunity\Internal\Framework\Module\MetaData\Exception\UnsupportedMetaDataKeyException;
 use OxidEsales\EshopCommunity\Internal\Framework\Module\MetaData\Exception\UnsupportedMetaDataValueTypeException;
 use OxidEsales\EshopCommunity\Internal\Framework\Module\MetaData\Service\MetaDataProviderInterface;
-use OxidEsales\EshopCommunity\Tests\TestUtils\TestContainerFactory;
 use OxidEsales\EshopCommunity\Tests\TestUtils\Traits\ContainerTrait;
 use PHPUnit\Framework\TestCase;
-use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Webmozart\PathUtil\Path;
 
 class MetaDataMapperTest extends TestCase

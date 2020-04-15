@@ -9,7 +9,6 @@ declare(strict_types=1);
 
 namespace OxidEsales\EshopCommunity\Tests\Integration\Internal\Framework\Module\Setting;
 
-use Doctrine\DBAL\Connection;
 use OxidEsales\Eshop\Core\Registry;
 use OxidEsales\EshopCommunity\Internal\Framework\Config\Utility\ShopSettingEncoderInterface;
 use OxidEsales\EshopCommunity\Internal\Framework\Database\QueryBuilderFactoryInterface;
@@ -18,9 +17,7 @@ use OxidEsales\EshopCommunity\Internal\Framework\Module\Setting\Setting;
 use OxidEsales\EshopCommunity\Internal\Transition\Adapter\ShopAdapterInterface;
 use OxidEsales\EshopCommunity\Internal\Framework\Dao\EntryDoesNotExistDaoException;
 use OxidEsales\EshopCommunity\Tests\TestUtils\Traits\ContainerTrait;
-use OxidEsales\EshopCommunity\Tests\TestUtils\Traits\DatabaseTestingTrait;
 use PHPUnit\Framework\TestCase;
-use Webmozart\PathUtil\Path;
 
 /**
  * @internal

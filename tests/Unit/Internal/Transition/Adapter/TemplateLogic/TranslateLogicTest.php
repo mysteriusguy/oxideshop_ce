@@ -129,7 +129,6 @@ class TranslateLogicTest extends TestCase
         $this->setLanguage(1);
 
         $oShop = Registry::getConfig()->getActiveShop();
-        #print("\n\n######################\n" . var_dump($oShop) . "\n######################\n\n");
         $oShop->oxshops__oxproductive = new Field($isProductiveMode);
         $oShop->save();
 

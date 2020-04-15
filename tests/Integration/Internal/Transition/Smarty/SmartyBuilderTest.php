@@ -15,9 +15,7 @@ use OxidEsales\EshopCommunity\Internal\Framework\Smarty\SmartyBuilder;
 use OxidEsales\EshopCommunity\Internal\Framework\Smarty\SmartyContext;
 use OxidEsales\EshopCommunity\Internal\Framework\Smarty\SmartyContextInterface;
 use OxidEsales\EshopCommunity\Internal\Transition\Utility\BasicContextInterface;
-use OxidEsales\EshopCommunity\Tests\TestUtils\Traits\ConfigHandlingTrait;
 use OxidEsales\EshopCommunity\Tests\TestUtils\Traits\ContainerTrait;
-use Webmozart\PathUtil\Path;
 
 class SmartyBuilderTest extends \PHPUnit\Framework\TestCase
 {
