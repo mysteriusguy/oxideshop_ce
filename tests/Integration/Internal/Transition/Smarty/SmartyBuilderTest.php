@@ -19,7 +19,6 @@ use OxidEsales\EshopCommunity\Tests\TestUtils\Traits\ContainerTrait;
 
 class SmartyBuilderTest extends \PHPUnit\Framework\TestCase
 {
-    use ConfigHandlingTrait;
     use ContainerTrait;
 
     public function setup(): void
