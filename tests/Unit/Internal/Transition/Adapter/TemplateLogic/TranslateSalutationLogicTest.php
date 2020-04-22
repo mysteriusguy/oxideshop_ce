@@ -8,6 +8,7 @@
 namespace OxidEsales\EshopCommunity\Tests\Unit\Internal\Transition\Adapter\TemplateLogic;
 
 use OxidEsales\EshopCommunity\Internal\Transition\Adapter\TemplateLogic\TranslateSalutationLogic;
+use OxidEsales\EshopCommunity\Tests\TestUtils\Traits\ContainerTrait;
 use OxidEsales\EshopCommunity\Tests\TestUtils\Traits\LanguageHandlingTrait;
 use OxidEsales\TestingLibrary\UnitTestCase;
 use PHPUnit\Framework\TestCase;
@@ -17,7 +18,7 @@ use PHPUnit\Framework\TestCase;
  */
 class TranslateSalutationLogicTest extends TestCase
 {
-    use LanguageHandlingTrait;
+    use ContainerTrait;
 
     /** @var TranslateSalutationLogic */
     private $translateSalutationLogic;

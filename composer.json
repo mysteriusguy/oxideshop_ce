@@ -41,14 +41,13 @@
         "oxid-esales/oxideshop-ide-helper": "dev-master",
         "oxid-esales/azure-theme": "dev-master",
         "oxid-esales/oxideshop-facts": "dev-master",
-        "oxid-esales/testing-library": "dev-master",
+	"oxid-esales/codeception-modules": "*",
+        "oxid-esales/codeception-page-objects": "*",
         "squizlabs/php_codesniffer": "^3.5.4",
-        "phpunit/phpunit": "^7",
-        "codeception/codeception": "^3.1",
-        "oxid-esales/codeception-modules": "*",
-        "oxid-esales/oxideshop-facts": "^2.3.1",
+        "phpunit/phpunit": "^9",
         "oxid-esales/testing-utils": "*",
-        "oxid-esales/codeception-page-objects": "^1.1"
+	"composer/composer": "^1",
+        "codeception/module-asserts": "^1.1"
     },
     "autoload": {
         "psr-4": {
@@ -68,7 +67,7 @@
             "if [ -f ./vendor/bin/oe-eshop-ide_helper ]; then oe-eshop-ide_helper; fi"
         ],
         "phpunit": [
-            "./vendor/bin/phpunit --debug --configuration phpunit.xml"
+            "./vendor/bin/phpunit --configuration phpunit.xml"
         ]
     },
     "extra": {
@@ -94,6 +93,10 @@
         }
     },
     "repositories": {
+        "oxid-esales/testing-library": {
+            "type": "path",
+            "url": "/home/michael/workspace/testing_library"
+        },
         "oxid-esales/traditional-testing": {
             "type": "path",
             "url": "/home/michael/workspace/traditional_testing"
@@ -101,6 +104,10 @@
         "oxid-esales/codeception-modules": {
             "type": "path",
             "url": "/home/michael/workspace/codeception-modules"
+        },
+        "oxid-esales/codeception-page-objects": {
+            "type": "path",
+            "url": "/home/michael/workspace/codeception-page-objects"
         },
         "oxid-esales/testing-utils": {
             "type": "path",
