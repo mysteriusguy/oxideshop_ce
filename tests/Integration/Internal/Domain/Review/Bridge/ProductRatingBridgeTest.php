@@ -29,6 +29,7 @@ class ProductRatingBridgeTest extends \PHPUnit\Framework\TestCase
     {
         parent::setUp();
         $this->setupIntegrationTest();
+        $this->forceDatabaseSetup();
         $this->createTestProduct();
         $this->createTestRatings();
     }
