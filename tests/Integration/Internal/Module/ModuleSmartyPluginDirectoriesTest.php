@@ -10,6 +10,7 @@ namespace OxidEsales\EshopCommunity\Tests\Integration\Core\Module;
 use OxidEsales\Eshop\Core\UtilsView;
 use OxidEsales\EshopCommunity\Tests\TestUtils\Traits\ModuleTestingTrait;
 use PHPUnit\Framework\TestCase;
+use Webmozart\PathUtil\Path;
 
 /**
  * Class ModuleSmartyPluginDirectoryTest
@@ -23,7 +24,7 @@ class ModuleSmartyPluginDirectoriesTest extends TestCase
         parent::setUp();
         $this->setupIntegrationTest();
         $module = 'with_metadata_v21';
-        $this->installModule($module);
+        $this->installModule($module, Path::canonicalize(Path::join(__DIR__, 'Fixtures')));
         $this->activateModule($module);
 
     }
