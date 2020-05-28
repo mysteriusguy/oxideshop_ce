@@ -14,6 +14,7 @@ use Symfony\Component\Config\FileLocatorInterface;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Lock\LockFactory;
 use Symfony\Component\Yaml\Yaml;
+use Symfony\Component\Filesystem\Exception\IOException;
 
 class YamlFileStorage implements ArrayStorageInterface
 {
@@ -120,7 +121,20 @@ class YamlFileStorage implements ArrayStorageInterface
      */
     private function createFile(): void
     {
-        $this->filesystemService->touch($this->filePath);
+        $files = $this->filePath;
+        $time = null;
+        $atime = null;
+        foreach ($this->toIterable($files) as $file) {
+            $touch = $time ? touch($file, $time, $atime) : touch($file);
+            if (true !== $touch) {
+                throw new IOException(sprintf('Failed to touch "%s".', $file), 0, null, $file);
+            }
+        }
+    }
+
+    private function toIterable($files): iterable
+    {
+        return \is_array($files) || $files instanceof \Traversable ? $files : [$files];
     }
 
     /**
