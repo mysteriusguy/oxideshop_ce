@@ -127,11 +127,18 @@ class YamlFileStorage implements ArrayStorageInterface
         foreach ($this->toIterable($files) as $file) {
             $touch = $time ? touch($file, $time, $atime) : touch($file);
             if (true !== $touch) {
-                $permissions = exec('ls -al' . dirname($this->filePath));
+                exec('ls -al ' . dirname($this->filePath), $output);
+                var_dump($output);
                 $permissionsDir = decoct(fileperms(\dirname($this->filePath)) & 0777);
-                $processUser = exec('id');
-                var_dump($touch, $permissions, $processUser);
+                $processUser = exec('id', $outputId);
+                var_dump($touch, $outputId);
                 throw new IOException(sprintf('Failed to touch "%s", with permissions "%s" for user %s.', $file, $permissionsDir, $processUser), 0, null, $file);
+            } else {
+                exec('ls -al ' . dirname($this->filePath), $output);
+                var_dump($output);
+                $permissionsDir = decoct(fileperms(\dirname($this->filePath)) & 0777);
+                exec('id', $outputId);
+                var_dump($touch, $permissionsDir, $outputId);
             }
         }
     }
