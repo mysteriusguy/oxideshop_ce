@@ -15,36 +15,30 @@ use OxidEsales\EshopCommunity\Internal\Framework\Smarty\SmartyBuilder;
 use OxidEsales\EshopCommunity\Internal\Framework\Smarty\SmartyContext;
 use OxidEsales\EshopCommunity\Internal\Framework\Smarty\SmartyContextInterface;
 use OxidEsales\EshopCommunity\Internal\Transition\Utility\BasicContextInterface;
+use OxidEsales\EshopCommunity\Tests\TestUtils\IntegrationTestCase;
 use OxidEsales\EshopCommunity\Tests\TestUtils\Traits\ContainerTrait;
+use Webmozart\PathUtil\Path;
 
-class SmartyBuilderTest extends \PHPUnit\Framework\TestCase
+class SmartyBuilderTest extends IntegrationTestCase
 {
-    use ContainerTrait;
-
-    public function setup(): void
-    {
-        parent::setUp();
-        $this->setupIntegrationTest();
-    }
-
-    public function tearDown(): void
-    {
-        $this->tearDownTestContainer();
-        parent::tearDown();
-    }
-
     /**
      * @dataProvider smartySettingsDataProvider
      *
-     * @param bool $securityMode
+     * @param bool $securityOn
      * @param array $smartySettings
      */
-    public function testSmartySettingsAreSetCorrect($securityMode, $smartySettings)
+    public function testSmartySettingsAreSetCorrect($securityOn)
     {
+        if ($securityOn) {
+            $smartySettings = $this->getSmartySettingsWithSecurityOn();
+        } else {
+            $smartySettings = $this->getSmartySettingsWithSecurityOff();
+        }
         $smartyBuilder = new SmartyBuilder();
-        $this->setupAndConfigureContainer($securityMode);
+        $this->setupAndConfigureContainer($securityOn);
         $configurationFactory = $this->get(SmartyConfigurationFactoryInterface::class);
         $configuration = $configurationFactory->getConfiguration();
+
         $smarty = $smartyBuilder->setSettings($configuration->getSettings())
             ->setSecuritySettings($configuration->getSecuritySettings())
             ->registerPlugins($configuration->getPlugins())
@@ -64,8 +58,8 @@ class SmartyBuilderTest extends \PHPUnit\Framework\TestCase
     public function smartySettingsDataProvider()
     {
         return [
-            'security on' => [1, $this->getSmartySettingsWithSecurityOn()],
-            'security off' => [0, $this->getSmartySettingsWithSecurityOff()]
+            'securityOn' => [1],
+            'security off' => [0]
         ];
     }
 

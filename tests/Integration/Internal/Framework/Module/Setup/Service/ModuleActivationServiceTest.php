@@ -25,6 +25,7 @@ use OxidEsales\EshopCommunity\Internal\Framework\Module\Setup\Service\ModuleActi
 use OxidEsales\EshopCommunity\Internal\Framework\Module\State\ModuleStateServiceInterface;
 use OxidEsales\EshopCommunity\Tests\Integration\Internal\Framework\Module\TestData\TestModule\SomeModuleService;
 use OxidEsales\EshopCommunity\Tests\Integration\Internal\Module\TestData\TestModule\TestEvent;
+use OxidEsales\EshopCommunity\Tests\TestUtils\IntegrationTestCase;
 use OxidEsales\EshopCommunity\Tests\TestUtils\Traits\DatabaseTestingTrait;
 use PHPUnit\Framework\TestCase;
 use OxidEsales\EshopCommunity\Internal\Framework\Module\Configuration\DataObject\ModuleConfiguration\ClassExtension;
@@ -37,27 +38,16 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 /**
  * @internal
  */
-class ModuleActivationServiceTest extends TestCase
+class ModuleActivationServiceTest extends IntegrationTestCase
 {
 
     private $shopId = 1;
     private $testModuleId = 'testModuleId';
 
-    use DatabaseTestingTrait;
-
-    private $moduleSettingsRestorer;
-
     public function setup(): void
     {
         $this->overrideService(ModulePathResolverInterface::class, $this->getModulePathResolverMock());
-        $this->setupIntegrationTest();
         parent::setUp();
-    }
-
-    protected function tearDown(): void
-    {
-        $this->tearDownTestContainer();
-        parent::tearDown();
     }
 
     public function testActivation()

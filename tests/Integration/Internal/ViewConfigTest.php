@@ -10,25 +10,14 @@ declare(strict_types=1);
 namespace OxidEsales\EshopCommunity\Tests\Integration\Internal;
 
 use OxidEsales\Eshop\Core\ViewConfig;
+use OxidEsales\EshopCommunity\Tests\TestUtils\IntegrationTestCase;
 use OxidEsales\EshopCommunity\Tests\TestUtils\Traits\ModuleTestingTrait;
 use PHPUnit\Framework\TestCase;
 use Webmozart\PathUtil\Path;
 
-final class ViewConfigTest extends TestCase
+final class ViewConfigTest extends IntegrationTestCase
 {
     use ModuleTestingTrait;
-
-    public function setup(): void
-    {
-        parent::setUp();
-        $this->setupIntegrationTest();
-    }
-
-    public function tearDown(): void
-    {
-        $this->tearDownTestContainer();
-        parent::tearDown();
-    }
 
     public function testIsModuleActive(): void
     {

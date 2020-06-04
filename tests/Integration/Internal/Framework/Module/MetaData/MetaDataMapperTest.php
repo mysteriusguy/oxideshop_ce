@@ -14,26 +14,13 @@ use OxidEsales\EshopCommunity\Internal\Framework\Module\MetaData\Exception\Modul
 use OxidEsales\EshopCommunity\Internal\Framework\Module\MetaData\Exception\UnsupportedMetaDataKeyException;
 use OxidEsales\EshopCommunity\Internal\Framework\Module\MetaData\Exception\UnsupportedMetaDataValueTypeException;
 use OxidEsales\EshopCommunity\Internal\Framework\Module\MetaData\Service\MetaDataProviderInterface;
+use OxidEsales\EshopCommunity\Tests\TestUtils\IntegrationTestCase;
 use OxidEsales\EshopCommunity\Tests\TestUtils\Traits\ContainerTrait;
 use PHPUnit\Framework\TestCase;
 use Webmozart\PathUtil\Path;
 
-class MetaDataMapperTest extends TestCase
+class MetaDataMapperTest extends IntegrationTestCase
 {
-    use ContainerTrait;
-
-    public function setUp(): void
-    {
-        parent::setUp();
-        $this->setupIntegrationTest();
-    }
-
-    public function tearDown(): void
-    {
-        $this->tearDownTestContainer();
-        parent::tearDown();
-    }
-
     public function testModuleMetaData20(): void
     {
         $metaDataFilePath = $this->getMetaDataFilePath('TestModuleMetaData20');

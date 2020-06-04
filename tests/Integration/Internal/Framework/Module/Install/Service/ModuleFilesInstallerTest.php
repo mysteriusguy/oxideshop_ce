@@ -12,21 +12,14 @@ namespace OxidEsales\EshopCommunity\Tests\Integration\Internal\Framework\Module\
 use OxidEsales\EshopCommunity\Internal\Framework\Module\Install\DataObject\OxidEshopPackage;
 use OxidEsales\EshopCommunity\Internal\Framework\Module\Install\Service\ModuleFilesInstallerInterface;
 use OxidEsales\EshopCommunity\Internal\Transition\Utility\ContextInterface;
+use OxidEsales\EshopCommunity\Tests\TestUtils\IntegrationTestCase;
 use OxidEsales\EshopCommunity\Tests\TestUtils\Traits\ContainerTrait;
 use PHPUnit\Framework\TestCase;
 
-final class ModuleFilesInstallerTest extends TestCase
+final class ModuleFilesInstallerTest extends IntegrationTestCase
 {
-    use ContainerTrait;
-
     private $modulePackagePath = __DIR__ . '/../../TestData/TestModule';
     private $packageName = 'TestModule';
-
-    public function setUp(): void
-    {
-        parent::setUp();
-        $this->setupIntegrationTest();
-    }
 
     public function tearDown(): void
     {
@@ -34,7 +27,6 @@ final class ModuleFilesInstallerTest extends TestCase
         $fileSystem->remove($this->getTestedModuleInstallPath());
         $fileSystem->remove($this->getModulesPath() . '/custom-test-directory/');
 
-        $this->tearDownTestContainer();
         parent::tearDown();
     }
 
@@ -147,7 +139,7 @@ final class ModuleFilesInstallerTest extends TestCase
 
         $installer->install($package);
 
-        $this->assertFileNotExists($this->getTestedModuleInstallPath() . '/readme.txt');
+        $this->assertFileDoesNotExist($this->getTestedModuleInstallPath() . '/readme.txt');
     }
 
     public function testBlacklistedFilesAreSkippedWhenSingleFileNameBlacklistFilterIsDefined(): void
@@ -159,7 +151,7 @@ final class ModuleFilesInstallerTest extends TestCase
 
         $installer->install($package);
 
-        $this->assertFileNotExists($this->getTestedModuleInstallPath() . '/readme.txt');
+        $this->assertFileDoesNotExist($this->getTestedModuleInstallPath() . '/readme.txt');
     }
 
     public function testBlacklistedDirectoryIsSkippedWhenBlacklistFilterIsDefined(): void
@@ -171,7 +163,7 @@ final class ModuleFilesInstallerTest extends TestCase
         $installer->install($package);
 
         $this->assertDirectoryExists($this->modulePackagePath . '/BlackListDirectory');
-        $this->assertDirectoryNotExists($this->getTestedModuleInstallPath() . '/BlackListDirectory');
+        $this->assertDirectoryDoesNotExist($this->getTestedModuleInstallPath() . '/BlackListDirectory');
     }
 
     public function testUninstall(): void

@@ -20,13 +20,12 @@ use Symfony\Component\Console\Output\StreamOutput;
 class ExecutorTest extends TestCase
 {
     use ConsoleTrait;
-    use ContainerTrait;
 
     public function testIfRegisteredCommandInList()
     {
         $output = $this->executeCommand('list');
 
-        $this->assertRegexp('/oe:tests:test-command/', $this->getOutputFromStream($output));
+        $this->assertMatchesRegularExpression('/oe:tests:test-command/', $this->getOutputFromStream($output));
     }
 
     public function testCommandExecution()

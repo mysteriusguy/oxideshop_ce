@@ -17,14 +17,14 @@ use OxidEsales\EshopCommunity\Internal\Container\ContainerFactory;
 use OxidEsales\EshopCommunity\Internal\Framework\Module\Configuration\Bridge\ShopConfigurationDaoBridgeInterface;
 use OxidEsales\EshopCommunity\Internal\Framework\Module\Configuration\DataObject\ModuleConfiguration;
 use OxidEsales\EshopCommunity\Internal\Framework\Module\Setup\Bridge\ModuleActivationBridgeInterface;
+use OxidEsales\EshopCommunity\Tests\TestUtils\IntegrationTestCase;
 use OxidEsales\EshopCommunity\Tests\TestUtils\Traits\ModuleTestingTrait;
-use PHPUnit\Framework\TestCase;
 use Webmozart\PathUtil\Path;
 
 /**
  * @internal
  */
-class ModuleListTest extends TestCase
+class ModuleListTest extends IntegrationTestCase
 {
     use ModuleTestingTrait;
 
@@ -33,14 +33,7 @@ class ModuleListTest extends TestCase
     public function setUp(): void
     {
         parent::setUp();
-        $this->setupIntegrationTest();
         $this->fixturePath = Path::canonicalize(Path::join(__DIR__, 'Fixtures'));
-    }
-
-    public function tearDown(): void
-    {
-        $this->tearDownTestContainer();
-        parent::tearDown();
     }
 
     public function testDisabledModules()

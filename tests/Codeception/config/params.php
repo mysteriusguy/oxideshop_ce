@@ -7,8 +7,13 @@
 
 namespace OxidEsales\DoctrineMigrationWrapper;
 
+use OxidEsales\Eshop\Core\Registry;
+use OxidEsales\EshopCommunity\Tests\TestUtils\Database\TestConnectionFactory;
 use OxidEsales\Facts\Facts;
 use Webmozart\PathUtil\Path;
+
+require_once Path::join(dirname(__DIR__, 2), 'bootstrap.php');
+TestConnectionFactory::initAcceptance();
 
 $facts = new Facts();
 
@@ -18,15 +23,16 @@ $php = (getenv('PHPBIN')) ? : 'php';
 $cc_screen_shot_url = getenv('CC_SCREEN_SHOTS_URL');
 $cc_screen_shot_url = ($cc_screen_shot_url) ? : '';
 
+$config = Registry::getConfig();
 return [
     'SHOP_URL' => $facts->getShopUrl(),
     'SHOP_SOURCE_PATH' => $facts->getSourcePath(),
     'VENDOR_PATH' => $facts->getVendorPath(),
-    'DB_NAME' => 'testce',
-    'DB_USERNAME' => 'oxid',
-    'DB_PASSWORD' => 'oxid',
-    'DB_HOST' => 'localhost',
-    'DB_PORT' => 3306,
+    'DB_NAME' => $config->getConfigParam('dbName'),
+    'DB_USERNAME' => $config->getConfigParam('dbUser'),
+    'DB_PASSWORD' => $config->getConfigParam('dbPwd'),
+    'DB_HOST' => $config->getConfigParam('dbHost'),
+    'DB_PORT' => $config->getConfigParam('dbPort'),
     'DUMP_PATH' => Path::join('..', '..', 'TestUtils', 'Database', 'in_memory_schema_ce.sql'),
     'MYSQL_CONFIG_PATH' => Path::join(__DIR__, 'mysql.cnf'),
     'SELENIUM_SERVER_PORT' => $selenium_server_port,

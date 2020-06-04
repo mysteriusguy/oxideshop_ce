@@ -9,18 +9,19 @@ namespace OxidEsales\EshopCommunity\Tests\Unit\Internal\Transition\Adapter\Templ
 
 use OxidEsales\Eshop\Core\Field;
 use OxidEsales\EshopCommunity\Internal\Transition\Adapter\TemplateLogic\FormatDateLogic;
+use OxidEsales\EshopCommunity\Tests\TestUtils\IntegrationTestCase;
 use PHPUnit\Framework\TestCase;
 
 /**
  * Class FormatDateLogicTest
  */
-class FormatDateLogicTest extends TestCase
+class FormatDateLogicTest extends IntegrationTestCase
 {
 
     /** @var FormatDateLogic */
     private $formDateLogic;
 
-    protected function setUp(): void
+    public function setUp(): void
     {
         parent::setUp();
         $this->formDateLogic = new FormatDateLogic();
