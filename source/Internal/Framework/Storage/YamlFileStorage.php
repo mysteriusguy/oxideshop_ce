@@ -125,6 +125,8 @@ class YamlFileStorage implements ArrayStorageInterface
         $time = null;
         $atime = null;
         foreach ($this->toIterable($files) as $file) {
+            exec('flock -u '.$file, $outputlock);
+            var_dump($outputlock);
             $touch = $time ? touch($file, $time, $atime) : touch($file);
             if (true !== $touch) {
                 exec('ls -al ' . dirname($this->filePath), $output);
