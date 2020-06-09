@@ -125,8 +125,6 @@ class YamlFileStorage implements ArrayStorageInterface
         $time = null;
         $atime = null;
         foreach ($this->toIterable($files) as $file) {
-            var_dump(exec('flock -u '.$file, $outputlock));
-            var_dump($outputlock);
             $touch = $time ? touch($file, $time, $atime) : touch($file);
             if (true !== $touch) {
                 exec('ls -al ' . dirname($this->filePath), $output);
@@ -135,12 +133,14 @@ class YamlFileStorage implements ArrayStorageInterface
                 debug_print_backtrace();
                 throw new IOException(sprintf('Failed to touch "%s", with permissions "%s".', $file, $permissionsDir), 0, null, $file);
             } else {
-                exec('ls -al ' . dirname($this->filePath), $output);
-                var_dump($output);
-                $permissionsDir = decoct(fileperms(\dirname($this->filePath)) & 0777);
-                exec('id', $outputId);
-                var_dump($touch, $permissionsDir, $outputId);
-                debug_print_backtrace();
+                if (strpos($file, '2.yaml')) {
+                    exec('ls -al ' . dirname($this->filePath), $output);
+                    var_dump($output);
+                    $permissionsDir = decoct(fileperms(\dirname($this->filePath)) & 0777);
+                    exec('id', $outputId);
+                    var_dump($touch, $permissionsDir, $outputId);
+                    debug_print_backtrace();
+                }
             }
         }
     }
