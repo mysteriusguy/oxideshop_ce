@@ -75,18 +75,18 @@ class YamlFileStorage implements ArrayStorageInterface
      */
     public function save(array $data): void
     {
-        $lock = $this->lockFactory->createLock($this->getLockId());
+     /*   $lock = $this->lockFactory->createLock($this->getLockId());
 
         if ($lock->acquire(true)) {
-            try {
+            try {*/
                 file_put_contents(
                     $this->getLocatedFilePath(),
                     Yaml::dump($data, 10, 2)
                 );
-            } finally {
+          /*  } finally {
                 $lock->release();
             }
-        }
+        }*/
     }
 
     /**
