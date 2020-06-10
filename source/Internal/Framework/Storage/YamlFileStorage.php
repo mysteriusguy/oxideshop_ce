@@ -14,7 +14,6 @@ use Symfony\Component\Config\FileLocatorInterface;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Lock\LockFactory;
 use Symfony\Component\Yaml\Yaml;
-use Symfony\Component\Filesystem\Exception\IOException;
 
 class YamlFileStorage implements ArrayStorageInterface
 {
@@ -121,33 +120,7 @@ class YamlFileStorage implements ArrayStorageInterface
      */
     private function createFile(): void
     {
-        $files = $this->filePath;
-        $time = null;
-        $atime = null;
-        foreach ($this->toIterable($files) as $file) {
-            $touch = $time ? touch($file, $time, $atime) : touch($file);
-            if (true !== $touch) {
-                exec('ls -al ' . dirname($this->filePath), $output);
-                var_dump($output);
-                $permissionsDir = decoct(fileperms(\dirname($this->filePath)) & 0777);
-                debug_print_backtrace();
-                throw new IOException(sprintf('Failed to touch "%s", with permissions "%s".', $file, $permissionsDir), 0, null, $file);
-            } else {
-                if (strpos($file, '2.yaml')) {
-                    exec('ls -al ' . dirname($this->filePath), $output);
-                    var_dump($output);
-                    $permissionsDir = decoct(fileperms(\dirname($this->filePath)) & 0777);
-                    exec('id', $outputId);
-                    var_dump($touch, $permissionsDir, $outputId);
-                    debug_print_backtrace();
-                }
-            }
-        }
-    }
-
-    private function toIterable($files): iterable
-    {
-        return \is_array($files) || $files instanceof \Traversable ? $files : [$files];
+        $this->filesystemService->dumpFile($this->filePath, '');
     }
 
     /**
